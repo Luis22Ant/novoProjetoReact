@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "3HY52pJoKXds4hVpQNskt0KtsR2kh1q5vEkFs5oISpo=",
+  "Source": "ApiLojaEletronicos",
+  "BasePath": "_content/ApiLojaEletronicos",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
