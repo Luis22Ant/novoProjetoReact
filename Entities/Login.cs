@@ -11,10 +11,10 @@ namespace ApiLojaEletronicos.Entities
         public string Tipo { get; set; } = "";
         public string Cpf { get; set; } = "";
         public DateTime HoraCadastro { get; set; }
-        public DateTime DataNascimento { get; set; }
+        public string DataNascimento { get; set; } = "";
 
 
-        public void Update(string usuario, string senha, string tipo, string cpf, DateTime dataNasc)
+        public void Update(string usuario, string senha, string tipo, string cpf, string dataNasc)
         {
             Usuario = usuario;
             Senha = senha;

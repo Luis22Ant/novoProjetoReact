@@ -2,6 +2,7 @@
 using ApiLojaEletronicos.Persistence;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Globalization;
 
 namespace ApiLojaEletronicos.Controllers
 {
@@ -35,15 +36,52 @@ namespace ApiLojaEletronicos.Controllers
 
             return Ok(login);
         }
-
-        [HttpPost]
-        public ActionResult Post(Login login)
+        [HttpPost("login")]
+        public ActionResult Login(Login login)
         {
-            _context.Login.Add(login);
-            _context.SaveChanges();
+            // Verificar se as credenciais são válidas (exemplo: usuário e senha correspondem a um usuário existente)
+            var user = _context.Login.SingleOrDefault(u => u.Usuario == login.Usuario && u.Senha == login.Senha);
 
-            return CreatedAtAction(nameof(GetById), new { id = login.Id }, login);
+            if (user == null)
+            {
+                // Credenciais inválidas, retornar um status de erro
+                return Unauthorized();
+            }
+            else
+            {
+
+                return Ok();
+            }
+
+            // Adicionar lógica adicional conforme necessário
+
+            // Adicionar o novo registro
+            //_context.Login.Add(login);
+            //_context.SaveChanges();
+
         }
+
+        [HttpPost("cadastro")]
+        public ActionResult Cadastro(Login novoUsuario)
+        {
+            // Verificar se as credenciais são válidas (exemplo: usuário e senha correspondem a um usuário existente)
+            novoUsuario.HoraCadastro = DateTime.Now;
+            var user = _context.Login.SingleOrDefault(u => u.Usuario == novoUsuario.Usuario && u.Senha == novoUsuario.Senha);
+           
+
+            if (user != null)
+            {
+                // Credenciais inválidas, retornar um status de erro
+                return Conflict("Usuário com o mesmo nome de usuário já existe.");
+            }
+
+            _context.Login.Add(novoUsuario);
+            _context.SaveChanges();
+            return CreatedAtAction(nameof(GetById), new { id = novoUsuario.Id }, new { Mensagem = "Usuário criado com sucesso!" });
+            // Adicionar lógica adicional conforme necessário
+
+        }
+
 
         [HttpPut("{id}")]
         public ActionResult Update(Guid id, Login logins)
@@ -52,7 +90,7 @@ namespace ApiLojaEletronicos.Controllers
             if (login == null)
                 return NotFound();
 
-            login.Update(logins.Usuario, logins.Senha, logins.Cpf, logins.Tipo,logins.DataNascimento);
+            login.Update(logins.Usuario, logins.Senha, logins.Cpf, logins.Tipo, logins.DataNascimento);
 
             _context.Login.Update(login);
 
@@ -69,7 +107,7 @@ namespace ApiLojaEletronicos.Controllers
             if (login == null)
                 return NotFound();
 
-            login.Delete();
+            _context.Login.Remove(login);
 
             _context.SaveChanges();
             return NoContent();
