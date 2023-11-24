@@ -33,19 +33,19 @@ namespace ApiLojaEletronicos.Controllers
             return Ok(produtos);
         }
 
-        [HttpPost]
-        public ActionResult Post(Produto produto)
+        [HttpPost("cadastroProduto")]
+        public ActionResult CadastrarProduto(Produto produto)
         {
+            produto.DataCadastro = DateTime.Now;
             _context.Produto.Add(produto);
             _context.SaveChanges();
 
             return CreatedAtAction(nameof(GetById), new { id = produto.Id }, produto);
         }
-
-        [HttpPut("{id}")]
-        public ActionResult Update(Guid id, Produto produtos)
+        [HttpPut("{productId}")]
+        public ActionResult Update(Guid productId, Produto produtos)
         {
-            var produto = _context.Produto.SingleOrDefault(d => d.Id == id);
+            var produto = _context.Produto.SingleOrDefault(d => d.Id == productId);
             if (produto == null)
                 return NotFound();
 
@@ -55,8 +55,9 @@ namespace ApiLojaEletronicos.Controllers
 
             _context.SaveChanges();
 
-            return NoContent();
+            return Ok();
         }
+
 
         [HttpDelete("{id}")]
 
@@ -66,10 +67,10 @@ namespace ApiLojaEletronicos.Controllers
             if (produto == null)
                 return NotFound();
 
-            produto.Delete();
+            _context.Produto.Remove(produto);
 
             _context.SaveChanges();
-            return NoContent();
+            return Ok();
         }
     }
 }

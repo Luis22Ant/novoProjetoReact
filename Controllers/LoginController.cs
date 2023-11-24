@@ -96,7 +96,7 @@ namespace ApiLojaEletronicos.Controllers
 
             _context.SaveChanges();
 
-            return NoContent();
+            return Ok();
         }
 
         [HttpDelete("{id}")]
